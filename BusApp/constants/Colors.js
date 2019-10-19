@@ -1,6 +1,7 @@
 const tintColor = '#2f95dc';
 
 export default {
+  scarlet: 'rgb(199, 21, 49)',
   tintColor,
   tabIconDefault: '#ccc',
   tabIconSelected: tintColor,
