@@ -24,7 +24,7 @@ export default class InitialScreen extends React.Component {
                     <Text style={styles.headerText}>Welcome!</Text>
                 </View>
                 <View>
-                    <Image source={require('../assets/images/rutgers.png')} style={styles.rutgersImage}/>
+                    <Image source={require('../assets/images/ru-express.png')} style={styles.rutgersImage}/>
                     <Text style={styles.imageSubtitle}>Bus Scheduler</Text>
                 </View>
                 <TouchableOpacity onPress={this.onGetStarted} style={styles.getStartedButton}>
@@ -42,7 +42,7 @@ export default class InitialScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.scarlet,
+        backgroundColor: 'red',
         display: 'flex',
         alignItems: 'center',
     },
@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     rutgersImage: {
-        width: 304 * 0.7,
-        height: 270 * 0.7,
+        width: 640 * 0.5,
+        height: 360 * 0.5,
         marginBottom: 10
     },
     imageSubtitle: {

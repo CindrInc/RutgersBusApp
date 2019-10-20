@@ -13,9 +13,6 @@ import {
 } from 'react-native';
 import NavigationEvents from 'react-navigation';
 import Colors from '../../../constants/Colors';
-// import Constants from 'expo-constants';
-// import * as Location from 'expo-location';
-// import * as Permissions from 'expo-permissions';
 
 export default class HomeScreen extends React.Component {
 
@@ -30,29 +27,18 @@ export default class HomeScreen extends React.Component {
       // },
       schedule: []
     }
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+      this.getScheduleAsync()
+    });
   }
 
   componentDidMount() {
     this.getScheduleAsync()
   }
 
-  // getLocationAsync = async () => {
-  //   let { status } = await Permissions.askAsync(Permissions.LOCATION);
-  //   if (status !== 'granted') {
-  //     this.setState({
-  //       errorMessage: 'Permission to access location was denied',
-  //     });
-  //   }
-
-  //   let location = await Location.getCurrentPositionAsync({});
-  //   this.setState({
-  //     locationLoading: false,
-  //     location: {
-  //       latitude: location.coords.latitude,
-  //       longitude: location.coords.longitude
-  //     }
-  //   });
-  // }
+  componentWillUnmount() {
+    this.focusListener.remove()
+  }
 
   getScheduleAsync = async() => {
     try {
@@ -90,12 +76,12 @@ export default class HomeScreen extends React.Component {
       for (let i = 0; i < 4; i++) {
         let currClass = this.state.schedule[i];
         classViews.push(
-          <Text key={i}>{currClass.name} at {currClass.build} on {currClass.day}'s from {currClass.start} to {currClass.end}</Text>
+          <Text key={i} style={styles.classView}>- {currClass.name} at {currClass.build} on {currClass.day}'s from {currClass.start} to {currClass.end}</Text>
         );
       }
 
       scheduleView = (
-        <View>
+        <View style={styles.bloo}>
           <Text style={styles.scheduleTextAvail}>Your Class Schedule</Text>
           {classViews}
           <TouchableOpacity style={styles.enterScheduleBtn} onPress={this.onEnterSchedule}>
@@ -147,7 +133,16 @@ const styles = StyleSheet.create({
   },
   scheduleTextAvail: {
     fontSize: 24,
-    textAlign: 'center'
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  classView: {
+    fontSize: 18,
+    marginBottom: 5
+  },
+  bloo: {
+    display: 'flex',
+    alignItems: 'center'
   },
   scheduleTextEmptyContainer: {
     display: 'flex',

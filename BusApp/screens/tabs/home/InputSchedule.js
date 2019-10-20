@@ -13,6 +13,8 @@ import {
   Picker
 } from 'react-native';
 import Colors from '../../../constants/Colors';
+import Data from '../../../constants/Data';
+import ModalDropdown from 'react-native-modal-dropdown';
 
 
 export default class InputSchedule extends React.Component {
@@ -41,13 +43,20 @@ export default class InputSchedule extends React.Component {
                 </View>
                 <View style={styles.inputContainer}>
                     <Text style={styles.inputName}>Day of Week</Text>
-                    <TextInput style={styles.textInput} onChangeText={(text) => {
-                        let sched = this.state.schedule;
-                        sched[idx].day = text;
-                        this.setState({
-                            schedule: sched
-                        });
-                    }}></TextInput>
+                    <ModalDropdown
+                        style={styles.dropdownInput}
+                        textStyle={styles.dropdownText}
+                        dropdownTextStyle={styles.dropdownMenuText}
+                        options={['Monday/Wednesday', 'Tuesday/Thursday', 'Wednesday/Friday', 'Monday/Tuesday', 'Thursday/Friday']}
+                        defaultIndex={0}
+                        onSelect={(i, value) => {
+                            let sched = this.state.schedule;
+                            sched[idx].day = value;
+                            this.setState({
+                                schedule: sched
+                            });
+                        }
+                    }/>
                 </View>
                 <View style={styles.inputContainer}>
                     <Text style={styles.inputName}>Start Time</Text>
@@ -71,13 +80,20 @@ export default class InputSchedule extends React.Component {
                 </View>
                 <View style={styles.inputContainer}>
                     <Text style={styles.inputName}>Building Code</Text>
-                    <TextInput style={styles.textInput} onChangeText={(text) => {
-                        let sched = this.state.schedule;
-                        sched[idx].build = text;
-                        this.setState({
-                            schedule: sched
-                        });
-                    }}></TextInput>
+                    <ModalDropdown
+                        style={styles.dropdownInput}
+                        textStyle={styles.dropdownText}
+                        dropdownTextStyle={styles.dropdownMenuText}
+                        options={Data.buildings}
+                        defaultIndex={0}
+                        onSelect={(i, value) => {
+                            let sched = this.state.schedule;
+                            sched[idx].build = value;
+                            this.setState({
+                                schedule: sched
+                            });
+                        }
+                    }/>
                 </View>
             </View>
         )
@@ -91,7 +107,10 @@ export default class InputSchedule extends React.Component {
         return (
             <View style={styles.container}>
                 <ScrollView>
-                    <View style={styles.spacer}/>
+                    <View style={styles.imageContainer}>
+                        <Image style={styles.infoImage} source={require('../../../assets/images/schedule.png')}/>
+                        <Text style={styles.infoText}>Input your schedule information from WebReg, using information like the above.</Text>
+                    </View>
                     {classInputs}
                     <View style={styles.doneBtnContainer}>
                         <TouchableOpacity style={styles.doneBtn} onPress={this.onInputSchedule}>
@@ -128,8 +147,18 @@ const styles = StyleSheet.create({
     container: {
         flex: 1
     },
-    spacer: {
-        marginTop: 75
+    infoImage: {
+        width: 254 * 0.7,
+        height: 162 * 0.7,
+        marginBottom: 5
+    },
+    imageContainer: {
+        marginTop: 40,
+        display: 'flex',
+        alignItems: 'center'
+    },
+    infoText: {
+        textAlign: "center"
     },
     classInput: {
         padding: 4,
@@ -158,9 +187,24 @@ const styles = StyleSheet.create({
         padding: 5,
         flex: 1
     },
+    dropdownInput: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 10,
+        padding: 5,
+        textAlign: "center",
+        flex: 1
+    },
+    dropdownText: {
+        fontSize: 15
+    },
+    dropdownMenuText: {
+        fontSize: 15
+    },
     doneBtnContainer: {
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: 200
     },
     doneBtn: {
         borderWidth: 2,
