@@ -47,24 +47,62 @@ def arrival_Estimate(location,route):
         arrival_data = list(map(lambda x: str(x - current_time),arrival_data))
         return arrival_data
 
+def get_route(location,destination):
+    routes = []
+    for k,v in ROUTES_STOPS.items():
+        if STOP_ID[location] in list(v) and STOP_ID[destination] in list(v):
+            print(f"Route: {k}")
+            routes.append(k)
+    return routes
+
+def best_route(location,destination):
+    routes = get_route(location,destination)
+    times = []
+    for i in routes:
+        temp = bus_to_bus(location,destination,i)
+        if temp != -1:
+            times.append(temp)
+    return temp
 def bus_to_bus(location,destination,route):
-    for k,v in ROUTES_STOPS:
 
     if STOP_ID[destination] in ROUTES_STOPS[route]:
         url_arrival_estimates = "https://transloc-api-1-2.p.rapidapi.com/arrival-estimates.json"
-        querystring_arrival_estimates = {"agencies":"1323","stops":STOP_ID[destination],"routes":ROUTE_ID[route]}
+
+        querystring_destination_estimates = {"agencies":"1323","stops":STOP_ID[destination],"routes":ROUTE_ID[route]}
+        querystring_location_estimates = {"agencies":"1323","stops":STOP_ID[location],"routes":ROUTE_ID[route]}
+
+        response_destination_estimates = requests.request("GET", url_arrival_estimates, headers=headers, params=querystring_destination_estimates)
+        response_location_estimates = requests.request("GET", url_arrival_estimates, headers=headers, params=querystring_location_estimates)
+
+        rutgers_location_estimates = response_location_estimates.json()
+        rutgers_destination_estimates = response_destination_estimates.json()
+
+        destination_estimates = rutgers_destination_estimates["data"][0]["arrivals"]
+        location_estimates = rutgers_location_estimates["data"][0]["arrivals"]
+
         
-        response_arrival_estimates = requests.request("GET", url_arrival_estimates, headers=headers, params=querystring_arrival_estimates)
-        rutgers_arrival_estimates = response_arrival_estimates.json()
-        print(rutgers_arrival_estimates)
-        estimates = rutgers_arrival_estimates["data"][0]["arrivals"]
-        arrival_data = []
-        for i in estimates:
+        location_data = []
+        destination_data = []
+        for i in  destination_estimates:
             print(i)
             print("---------------")
+            destination_data.append(i["arrival_at"])
+
+        print("LOCATION")
+        for i in location_estimates:
+            print(i)
+            location_data.append(i["arrival_at"])
+        
+        location_data = list(map(lambda x: parser.parse(x).replace(tzinfo=None),location_data))
+        destination_data = list(map(lambda x: parser.parse(x).replace(tzinfo=None),destination_data))
+        times = []
+        for i in location_data:
+            for j in destination_data:
+                times.append(j-i)
+        return times
             
     else:
-        return f"{destination} not in {route}"
+        return -1 #f"{destination} not in {route}"
 
 
-bus_to_bus("Scott Hall","George Street Northbound at Paterson Street","Route Weekend 1")
+print(bus_to_bus("Scott Hall","George Street Northbound at Paterson Street","Route Weekend 1"))
