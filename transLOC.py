@@ -51,21 +51,22 @@ def get_route(location,destination):
     routes = []
     for k,v in ROUTES_STOPS.items():
         if STOP_ID[location] in list(v) and STOP_ID[destination] in list(v):
-            print(f"Route: {k}")
+            #print(f"Route: {k}")
             routes.append(k)
     return routes
 
 def best_route(location,destination):
     routes = get_route(location,destination)
-    times = []
+    lol = []
     for i in routes:
         temp = bus_to_bus(location,destination,i)
+        print(temp)
         if temp != -1:
-            times.append(temp)
-    return temp
+            lol.append(temp)
+    return lol
 def bus_to_bus(location,destination,route):
 
-    if STOP_ID[destination] in ROUTES_STOPS[route]:
+    if STOP_ID[destination] in ROUTES_STOPS[route] and STOP_ID[location] in ROUTES_STOPS[route]:
         url_arrival_estimates = "https://transloc-api-1-2.p.rapidapi.com/arrival-estimates.json"
         querystring_destination_estimates = {"agencies":"1323","stops":STOP_ID[destination],"routes":ROUTE_ID[route]}
         querystring_location_estimates = {"agencies":"1323","stops":STOP_ID[location],"routes":ROUTE_ID[route]}
@@ -139,4 +140,4 @@ def bus_to_bus(location,destination,route):
         return -1 #f"{destination} not in {route}"
 
 
-print(bus_to_bus("Scott Hall","George Street Northbound at Paterson Street","Route Weekend 1"))
+print(best_route("Student Activities Center Northbound","College Avenue Student Center"))
