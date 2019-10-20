@@ -34,14 +34,23 @@ rutgers_stops = response_stops.json()
 response_routes = requests.request("GET", url_routes, headers=headers, params=querystring_routes)
 rutgers_routes = response_routes.json()
 
-ROUTES_ID = {}
-ROUTES_STOPS = {}
-count = 0
-for i in rutgers_routes["data"]['1323']:
-    if i["long_name"] not in ROUTES_ID:
-        ROUTES_ID[i["long_name"]] = i["route_id"]
-    if i["long_name"] not in ROUTES_STOPS:
-        ROUTES_STOPS[i["long_name"]] = tuple(i["stops"])
+
+
+
+
+
+######################################################
+#Below are some scripts I ran to get the data
+######################################################
+
+# ROUTES_ID = {}
+# ROUTES_STOPS = {}
+# count = 0
+# for i in rutgers_routes["data"]['1323']:
+#     if i["long_name"] not in ROUTES_ID:
+#         ROUTES_ID[i["long_name"]] = i["route_id"]
+#     if i["long_name"] not in ROUTES_STOPS:
+#         ROUTES_STOPS[i["long_name"]] = tuple(i["stops"])
     
     
 
@@ -53,13 +62,13 @@ for i in rutgers_routes["data"]['1323']:
 #     if i["name"] not in STOPS_LOC:
 #         STOPS_LOC[i["name"]] = (i["location"]["lat"],i["location"]["lng"])
 
-f = open("routes_id.json", "w")
-f.write(f"{ROUTES_ID}")
-f.close()
+# f = open("routes_id.json", "w")
+# f.write(f"{ROUTES_ID}")
+# f.close()
 
-f = open("routes_stops.json","w")
-f.write(f"{ROUTES_STOPS}")
-f.close()
+# f = open("routes_stops.json","w")
+# f.write(f"{ROUTES_STOPS}")
+# f.close()
 
 
     
