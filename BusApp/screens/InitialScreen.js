@@ -11,25 +11,32 @@ import {
   View,
 } from 'react-native';
 
-function InitialScreen() {
-    return (
-        <View style={styles.container}>
-            <View style={styles.headerContainer}>
-                <Text style={styles.headerText}>Welcome!</Text>
-            </View>
-            <View>
-                <Image source={require('../assets/images/rutgers.png')} style={styles.rutgersImage}/>
-                <Text style={styles.imageSubtitle}>Bus Scheduler</Text>
-            </View>
-            <TouchableOpacity onPress={this.onGetStarted} style={styles.getStartedButton}>
-                <Text style={styles.getStartedButtonText}>Get Started</Text>
-            </TouchableOpacity>
-        </View>
-    )
-}
+class InitialScreen extends React.Component {
+    static navigationOptions = {
+        header: null
+    }
 
-InitialScreen.prototype.onGetStarted = function() {
-    console.log("Hello, World!");
+    render() {
+        return (
+            <View style={styles.container}>
+                <View style={styles.spacer}></View>
+                <View style={styles.headerContainer}>
+                    <Text style={styles.headerText}>Welcome!</Text>
+                </View>
+                <View>
+                    <Image source={require('../assets/images/rutgers.png')} style={styles.rutgersImage}/>
+                    <Text style={styles.imageSubtitle}>Bus Scheduler</Text>
+                </View>
+                <TouchableOpacity onPress={this.onGetStarted} style={styles.getStartedButton}>
+                    <Text style={styles.getStartedButtonText}>Get Started</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    onGetStarted = () => {
+        this.props.navigation.navigate('Main');
+    }
 }
 
 export default InitialScreen;
@@ -40,6 +47,9 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.scarlet,
         display: 'flex',
         alignItems: 'center',
+    },
+    spacer: {
+        height: 70
     },
     headerContainer: {
         marginBottom: 40
