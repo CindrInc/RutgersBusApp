@@ -21,6 +21,10 @@ querystring_routes = {"agencies": "1323","format":"json"}
 url_stops = "https://transloc-api-1-2.p.rapidapi.com/stops.json"
 querystring_stops = {"agencies":"1323"}
 
+url_vehicles = "https://transloc-api-1-2.p.rapidapi.com/vehicles.json"
+querystring_vehicles = {"agencies":"1323"}
+
+
 #All the JSON information
 response_agencies = requests.request("GET", url_agencies, headers=headers, params=querystring_agencies)
 rutgers = response_agencies.json()
@@ -34,6 +38,8 @@ rutgers_stops = response_stops.json()
 response_routes = requests.request("GET", url_routes, headers=headers, params=querystring_routes)
 rutgers_routes = response_routes.json()
 
+response_vehicles = requests.request("GET", url_vehicles, headers=headers, params=querystring_vehicles)
+rutgers_vehicles = response_vehicles.json()
 ######################################################
 #Below are some scripts I ran to get the data
 ######################################################
@@ -51,18 +57,30 @@ rutgers_routes = response_routes.json()
 
 # STOPS_ID = {}
 # STOPS_LOC = {}
-STOPS = []
-for i in rutgers_stops["data"]:
-    if i["name"] not in STOPS:
-        STOPS.append(i["name"])
+# STOPS = []
+# for i in rutgers_stops["data"]:
+#     if i["name"] not in STOPS:
+#         STOPS.append(i["name"])
 # for i in rutgers_stops["data"]:
 #     if i["name"] not in STOPS_ID:
 #         STOPS_ID[i["name"]] = i["stop_id"]
 #     if i["name"] not in STOPS_LOC:
 #         STOPS_LOC[i["name"]] = (i["location"]["lat"],i["location"]["lng"])
 
-f = open("buildings.json", "w")
-f.write(f"{STOPS}")
+vehicles = {}
+count = 0
+for i in rutgers_vehicles["data"]["1323"]:
+    print(count)
+    print(i["vehicle_id"])
+    if i["vehicle_id"] not in vehicles:
+        vehicles[i["vehicle_id"]] = i["route_id"]
+    count+=1
+
+#for i in rutgers_vehicles["data"]:
+#     if i["name"] not in vehicles:
+#         vehicles.append(i["name"])
+f = open("vehicles.json", "w")
+f.write(f"{vehicles}")
 f.close()
 
 # f = open("routes_stops.json","w")

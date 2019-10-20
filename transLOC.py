@@ -67,9 +67,13 @@ def bus_to_bus(location,destination,route):
 
     if STOP_ID[destination] in ROUTES_STOPS[route]:
         url_arrival_estimates = "https://transloc-api-1-2.p.rapidapi.com/arrival-estimates.json"
-
         querystring_destination_estimates = {"agencies":"1323","stops":STOP_ID[destination],"routes":ROUTE_ID[route]}
         querystring_location_estimates = {"agencies":"1323","stops":STOP_ID[location],"routes":ROUTE_ID[route]}
+
+        url_vehicles = "https://transloc-api-1-2.p.rapidapi.com/vehicles.json"
+        querystring_vehicles = {"agencies":"1323"}
+
+       
 
         response_destination_estimates = requests.request("GET", url_arrival_estimates, headers=headers, params=querystring_destination_estimates)
         response_location_estimates = requests.request("GET", url_arrival_estimates, headers=headers, params=querystring_location_estimates)
@@ -80,25 +84,55 @@ def bus_to_bus(location,destination,route):
         destination_estimates = rutgers_destination_estimates["data"][0]["arrivals"]
         location_estimates = rutgers_location_estimates["data"][0]["arrivals"]
 
-        
-        location_data = []
-        destination_data = []
-        for i in  destination_estimates:
-            print(i)
-            print("---------------")
-            destination_data.append(i["arrival_at"])
+        response_vehicles = requests.request("GET", url_vehicles, headers=headers, params=querystring_vehicles)
+        rutgers_vehicles = response_vehicles.json()
 
-        print("LOCATION")
-        for i in location_estimates:
-            print(i)
-            location_data.append(i["arrival_at"])
+        # vehicles = {}
+        # for i in rutgers_vehicles["data"]["1323"]:
+        #     print(i["route_id"])
+        #     if i["route_id"] not in vehicles:
+        #         vehicles[i["route_id"]] = i["vehicle_id"]
         
-        location_data = list(map(lambda x: parser.parse(x).replace(tzinfo=None),location_data))
-        destination_data = list(map(lambda x: parser.parse(x).replace(tzinfo=None),destination_data))
+        # vehicle = vehicles[ROUTE_ID[route]]
+       
+        location_vehicle_time = {}
+        print(type(rutgers_location_estimates["data"]))
+        for i in rutgers_location_estimates["data"][0]["arrivals"]:
+            print(i)
+            location_vehicle_time[i["arrival_at"]] = i["vehicle_id"]
+        
+        destination_vehicle_time = {}
+        for i in rutgers_destination_estimates["data"][0]["arrivals"]:
+            print(i)
+            destination_vehicle_time[i["arrival_at"]] = i["vehicle_id"]
+        
+        
         times = []
-        for i in location_data:
-            for j in destination_data:
-                times.append(j-i)
+        for k,v in location_vehicle_time.items():
+            for i,j in destination_vehicle_time.items():
+                if v == j:
+                    k = parser.parse(k).replace(tzinfo=None)
+                    i = parser.parse(i).replace(tzinfo=None)
+                    times.append(i-k)
+        
+        # location_data = []
+        # destination_data = []
+        # # for i in  destination_estimates:
+        # #     print(i)
+        # #     print("---------------")
+        # #     destination_data.append(i["arrival_at"])
+
+        # # print("LOCATION")
+        # # for i in location_estimates:
+        # #     print(i)
+        # #     location_data.append(i["arrival_at"])
+        
+        # location_data = list(map(lambda x: parser.parse(x).replace(tzinfo=None),location_data))
+        # destination_data = list(map(lambda x: parser.parse(x).replace(tzinfo=None),destination_data))
+        # times = []
+        # for i in location_data:
+        #     for j in destination_data:
+        #         times.append(j-i)
         return times
             
     else:
