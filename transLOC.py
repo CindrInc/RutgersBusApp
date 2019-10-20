@@ -25,7 +25,6 @@ def arrival_Estimate(location,route):
         return "NO BUSES AVAILABLE??"
 
     else:
-        
         estimates = rutgers_arrival_estimates["data"][0]["arrivals"]
         arrival_data = []
         for i in estimates:
@@ -48,4 +47,24 @@ def arrival_Estimate(location,route):
         arrival_data = list(map(lambda x: str(x - current_time),arrival_data))
         return arrival_data
 
+def bus_to_bus(location,destination,route):
+    for k,v in ROUTES_STOPS:
 
+    if STOP_ID[destination] in ROUTES_STOPS[route]:
+        url_arrival_estimates = "https://transloc-api-1-2.p.rapidapi.com/arrival-estimates.json"
+        querystring_arrival_estimates = {"agencies":"1323","stops":STOP_ID[destination],"routes":ROUTE_ID[route]}
+        
+        response_arrival_estimates = requests.request("GET", url_arrival_estimates, headers=headers, params=querystring_arrival_estimates)
+        rutgers_arrival_estimates = response_arrival_estimates.json()
+        print(rutgers_arrival_estimates)
+        estimates = rutgers_arrival_estimates["data"][0]["arrivals"]
+        arrival_data = []
+        for i in estimates:
+            print(i)
+            print("---------------")
+            
+    else:
+        return f"{destination} not in {route}"
+
+
+bus_to_bus("Scott Hall","George Street Northbound at Paterson Street","Route Weekend 1")

@@ -34,11 +34,6 @@ rutgers_stops = response_stops.json()
 response_routes = requests.request("GET", url_routes, headers=headers, params=querystring_routes)
 rutgers_routes = response_routes.json()
 
-
-
-
-
-
 ######################################################
 #Below are some scripts I ran to get the data
 ######################################################
@@ -56,15 +51,19 @@ rutgers_routes = response_routes.json()
 
 # STOPS_ID = {}
 # STOPS_LOC = {}
+STOPS = []
+for i in rutgers_stops["data"]:
+    if i["name"] not in STOPS:
+        STOPS.append(i["name"])
 # for i in rutgers_stops["data"]:
 #     if i["name"] not in STOPS_ID:
 #         STOPS_ID[i["name"]] = i["stop_id"]
 #     if i["name"] not in STOPS_LOC:
 #         STOPS_LOC[i["name"]] = (i["location"]["lat"],i["location"]["lng"])
 
-# f = open("routes_id.json", "w")
-# f.write(f"{ROUTES_ID}")
-# f.close()
+f = open("buildings.json", "w")
+f.write(f"{STOPS}")
+f.close()
 
 # f = open("routes_stops.json","w")
 # f.write(f"{ROUTES_STOPS}")
