@@ -134,10 +134,14 @@ def bus_to_bus(location,destination,route):
         # for i in location_data:
         #     for j in destination_data:
         #         times.append(j-i)
-        return times
+        
+        
+        times = list(filter(lambda y: y >= 0,list(map(lambda x: x.total_seconds(),times))))
+        print(times)
+        return min(times)
             
     else:
         return -1 #f"{destination} not in {route}"
 
 
-print(best_route("Student Activities Center Northbound","College Avenue Student Center"))
+print(bus_to_bus("Student Activities Center Northbound","College Avenue Student Center","Route Weekend 1"))
