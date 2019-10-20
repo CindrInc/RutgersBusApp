@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 
-class InitialScreen extends React.Component {
+export default class InitialScreen extends React.Component {
     static navigationOptions = {
         header: null
     }
@@ -38,8 +38,6 @@ class InitialScreen extends React.Component {
         this.props.navigation.navigate('Main');
     }
 }
-
-export default InitialScreen;
 
 const styles = StyleSheet.create({
     container: {
