@@ -95,53 +95,36 @@ def bus_to_bus(location,destination,route):
         #         vehicles[i["route_id"]] = i["vehicle_id"]
         
         # vehicle = vehicles[ROUTE_ID[route]]
-       
-        location_vehicle_time = {}
-        print(type(rutgers_location_estimates["data"]))
-        for i in rutgers_location_estimates["data"][0]["arrivals"]:
-            print(i)
-            location_vehicle_time[i["arrival_at"]] = i["vehicle_id"]
-        
-        destination_vehicle_time = {}
-        for i in rutgers_destination_estimates["data"][0]["arrivals"]:
-            print(i)
-            destination_vehicle_time[i["arrival_at"]] = i["vehicle_id"]
-        
-        
-        times = []
-        for k,v in location_vehicle_time.items():
-            for i,j in destination_vehicle_time.items():
-                if v == j:
-                    k = parser.parse(k).replace(tzinfo=None)
-                    i = parser.parse(i).replace(tzinfo=None)
-                    times.append(i-k)
-        
-        # location_data = []
-        # destination_data = []
-        # # for i in  destination_estimates:
-        # #     print(i)
-        # #     print("---------------")
-        # #     destination_data.append(i["arrival_at"])
-
-        # # print("LOCATION")
-        # # for i in location_estimates:
-        # #     print(i)
-        # #     location_data.append(i["arrival_at"])
-        
-        # location_data = list(map(lambda x: parser.parse(x).replace(tzinfo=None),location_data))
-        # destination_data = list(map(lambda x: parser.parse(x).replace(tzinfo=None),destination_data))
-        # times = []
-        # for i in location_data:
-        #     for j in destination_data:
-        #         times.append(j-i)
-        
-        
-        times = list(filter(lambda y: y >= 0,list(map(lambda x: x.total_seconds(),times))))
-        print(times)
-        return min(times)
+        if rutgers_location_estimates["data"] == [] or rutgers_destination_estimates["data"] == []:
+           return "NO buses i think"
+        else:
+            location_vehicle_time = {}
+            print(type(rutgers_location_estimates["data"]))
+            for i in rutgers_location_estimates["data"][0]["arrivals"]:
+                print(i)
+                location_vehicle_time[i["arrival_at"]] = i["vehicle_id"]
+            
+            destination_vehicle_time = {}
+            for i in rutgers_destination_estimates["data"][0]["arrivals"]:
+                print(i)
+                destination_vehicle_time[i["arrival_at"]] = i["vehicle_id"]
+            
+            
+            times = []
+            for k,v in location_vehicle_time.items():
+                for i,j in destination_vehicle_time.items():
+                    if v == j:
+                        k = parser.parse(k).replace(tzinfo=None)
+                        i = parser.parse(i).replace(tzinfo=None)
+                        times.append(i-k)
+            
+            
+            times = list(filter(lambda y: y >= 0,list(map(lambda x: x.total_seconds(),times))))
+            print(times)
+            return min(times)/60
             
     else:
         return -1 #f"{destination} not in {route}"
 
 
-#print(bus_to_bus("Student Activities Center Northbound","College Avenue Student Center","Route Weekend 1"))
+print(bus_to_bus("College Avenue Student Center","Livingston Student Center","Route Weekend 1"))
