@@ -29,8 +29,8 @@ def arrival_Estimate(location,route):
         estimates = rutgers_arrival_estimates["data"][0]["arrivals"]
         arrival_data = []
         for i in estimates:
-            print(i)
-            print("---------------")
+            # print(i)
+            # print("---------------")
             arrival_data.append(i["arrival_at"])
 
         
@@ -48,8 +48,4 @@ def arrival_Estimate(location,route):
         arrival_data = list(map(lambda x: str(x - current_time),arrival_data))
         return arrival_data
 
-for k in list(ROUTE_ID.keys()):
-   if arrival_Estimate("College Avenue Student Center",k) != "NO BUSES AVAILABLE??":
-       print(arrival_Estimate("College Avenue Student Center",k))
-       break
-   
+
