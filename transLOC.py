@@ -144,4 +144,4 @@ def bus_to_bus(location,destination,route):
         return -1 #f"{destination} not in {route}"
 
 
-print(bus_to_bus("Student Activities Center Northbound","College Avenue Student Center","Route Weekend 1"))
+#print(bus_to_bus("Student Activities Center Northbound","College Avenue Student Center","Route Weekend 1"))
